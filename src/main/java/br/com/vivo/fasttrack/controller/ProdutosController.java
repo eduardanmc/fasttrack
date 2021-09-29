@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -47,11 +49,15 @@ public class ProdutosController {
 	@PostMapping
 	public ResponseEntity<ProdutoDto> criar(@RequestBody @Valid ProdutoDto productDto, UriComponentsBuilder uriBuilder) {
 		
-	Produto produto = productMapper.map(productDto, Produto.class);
-		
-		URI uri = uriBuilder.path("/products/{id}").buildAndExpand(produto.getId()).toUri();
-		return ResponseEntity.created(uri).body(productMapper.map(produto, ProdutoDto.class));
+		if (productDto == null) {
+			return ResponseEntity.notFound().build();		
+		} else {
+			Produto produto = productMapper.map(productDto, Produto.class);
+			URI uri = uriBuilder.path("/products/{id}").buildAndExpand(produto.getId()).toUri();
+			return ResponseEntity.created(uri).body(productMapper.map(produto, ProdutoDto.class));
+		}
 	}
+
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ProdutoDto> buscar(@PathVariable Long id) {
@@ -79,7 +85,7 @@ public class ProdutosController {
 	
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity remover(@PathVariable Long id){
+	public ResponseEntity<?> remover(@PathVariable Long id){
 		Optional<Produto> optional = produtosRepository.findById(id);
 		if (optional.isPresent()) {
 			produtosRepository.deleteById(id);

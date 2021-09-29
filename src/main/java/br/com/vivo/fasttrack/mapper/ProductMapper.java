@@ -8,11 +8,10 @@ import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.ConfigurableMapper;
 
 @Component
-
 public class ProductMapper extends ConfigurableMapper {
 
 	@Override
-	protected void configure(MapperFactory factory) {
+	public void configure(MapperFactory factory) {
 		factory.classMap(ProdutoDto.class, Produto.class).byDefault().register();
 
 	}
