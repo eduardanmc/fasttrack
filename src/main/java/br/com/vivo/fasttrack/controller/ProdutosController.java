@@ -25,7 +25,6 @@ import br.com.vivo.fasttrack.controller.dto.ProdutoDto;
 import br.com.vivo.fasttrack.mapper.ProductMapper;
 import br.com.vivo.fasttrack.modelo.Produto;
 import br.com.vivo.fasttrack.repository.ProdutosRepository;
-import br.com.vivo.fasttrack.service.Service;
 
 @RestController
 @RequestMapping("/products")
@@ -34,9 +33,6 @@ public class ProdutosController {
 	@Autowired
 	private ProdutosRepository produtosRepository;
 	
-	//@Autowired
-	//private Service service;
-
 	@Autowired
 	private ProductMapper productMapper;
 	
